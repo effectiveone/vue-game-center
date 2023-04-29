@@ -1,0 +1,36 @@
+{
+  "name": "vue-first-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.12.4",
+    "@pixi/loaders": "^6.5.9",
+    "axios": "^1.4.0",
+    "core-js": "^3.30.1",
+    "dat.gui": "^0.7.9",
+    "gsap": "^3.11.5",
+    "konva": "^9.0.1",
+    "material-ui-chip-input": "^1.1.0",
+    "oimo": "^1.0.9",
+    "phaser": "^3.60.0",
+    "pixi.js": "^7.2.4",
+    "pixi.js-legacy": "^7.2.4",
+    "three": "^0.152.0",
+    "vue": "^3.2.47",
+    "vue-konva": "^3.0.2",
+    "vue-router": "^4.1.6",
+    "vue-threejs": "^0.2.0-alpha.1",
+    "vuetify": "^3.1.15",
+    "vuex": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
+    "@vue/compiler-sfc": "^3.2.47"
+  }
+}
