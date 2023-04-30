@@ -1,8 +1,14 @@
 <template>
   <div id="tetris-game">
     <canvas ref="canvas"></canvas>
+    <div v-if="gameIsOver" class="game-over">
+      <h2>Game Over</h2>
+      <button @click="resetGame">Play Again</button>
+    </div>
   </div>
 </template>
+
+
 
 <script>
 import Block from "../../components/tetris/Block.js";
@@ -14,8 +20,9 @@ export default {
   data() {
     return {
       board: null,
-      block: null,
-      lastDropTime: null,
+    block: null,
+    lastDropTime: null,
+    gameIsOver: false,
     };
   },
 
@@ -35,13 +42,30 @@ export default {
         squareSize: 20,
       });
 
+
+      
       this.block = new Block(this.board);
       await this.block.init();
 
       this.block.nextBlock();
       this.initControls();
+
       this.startGame();
     },
+
+    resetGame() {
+  this.gameIsOver = false;
+
+  this.block = new Block(this.board);
+  this.block.init().then(() => {
+    this.block.nextBlock();
+  });
+
+  // Resetujemy również planszę
+  this.board.reset();
+
+  this.startGame();
+},
 
     initControls() {
       document.addEventListener("keydown", (e) => {
@@ -71,13 +95,14 @@ export default {
     // collision
     this.block.lockOnBoard();
     this.board.removeFullRows();
-    if (this.board.isGameOver()) {
+    if (this.board.isGameOver(this.isBlockYNegative)) {
       this.gameOver();
       return;
     }
     this.block.nextBlock();
   }
 },
+
 
     startGame() {
       this.lastDropTime = Date.now();
@@ -103,14 +128,21 @@ export default {
   this.board.draw(this.context, this.board.squareSize);
   this.block.drawOnBoard(this.context);
 },
-gameOver() {
-    const scoreData = {
-      game: "tetris",
-      time: Date.now(),
-      score: this.board.score,
-    };
-    this.addScore(scoreData);
+isBlockYNegative() {
+    return this.block.y < 0;
   },
+  gameOver() {
+  const scoreData = {
+    game: "tetris",
+    time: Date.now(),
+    score: this.board.score,
+  };
+  this.addScore(scoreData);
+  console.log("game over");
+  this.gameIsOver = true;
+},
+
+
 
   },
 
@@ -125,4 +157,30 @@ gameOver() {
 #tetris-game {
   margin: 0 auto;
 }
+
+.game-over {
+  position: absolute;
+  top: 50%;
+  left: 33%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
 </style>

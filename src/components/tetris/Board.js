@@ -10,6 +10,8 @@ export default class Board {
     const canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
+    this.squareSize = squareSize;
+    this.grid = this.getEmptyBoard();
     document.getElementById('tetris-game').appendChild(canvas);
     this.context = canvas.getContext('2d');
 
@@ -41,12 +43,24 @@ export default class Board {
     }
   }
 
-  isGameOver() {
-    for (let x = 0; x < this.width; x++) {
-      if (this.board[0][x] !== 0) {
+  getEmptyBoard() {
+    return Array.from({ length: this.NUM_ROWS }, () =>
+      Array(this.NUM_COLS).fill(this.DEFAULT)
+    );
+  }
+
+  isGameOver(checkNegativeY) {
+    for (let x = 0; x < this.NUM_COLS; x++) {
+      if (this.board[0][x] !== this.DEFAULT) {
         return true;
       }
     }
+
+    // Check if the block's y-coordinate is negative
+    if (checkNegativeY && checkNegativeY()) {
+      return true;
+    }
+
     return false;
   }
 
@@ -113,6 +127,10 @@ export default class Board {
       return true;
     }
   };
+
+  reset() {
+    this.board = this.getEmptyBoard();
+  }
 
   removeFullRows = () => {
     let newScore = 0;
