@@ -41,6 +41,15 @@ export default class Board {
     }
   }
 
+  isGameOver() {
+    for (let x = 0; x < this.width; x++) {
+      if (this.board[0][x] !== 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   draw = () => {
     // draw grid
     this.context.lineWidth = 10;

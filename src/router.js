@@ -2,11 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import GamesList from './pages/games/GamesList.vue';
 import Snake from './pages/games/Snake.vue';
-import Racing from './pages/games/Racing.vue';
+import Tetris from './pages/games/Tetris.vue';
 import Memory from './pages/games/Memory.vue';
-import Hangover from './pages/games/Hangover.vue';
-import Rubic from './pages/games/Rubic.vue';
-import SolarSystem from './pages/games/SolarSystem.vue';
+import BreakBrics from './pages/games/BreakBrics.vue';
 
 import NotFound from './pages/NotFound.vue';
 import UserAuth from './pages/auth/UserAuth.vue';
@@ -18,12 +16,8 @@ const router = createRouter({
     { path: '/', redirect: '/games' },
     { path: '/games', component: GamesList },
     { path: '/snake', component: Snake },
-    { path: '/hangman', component: Hangover },
-
-    { path: '/solarsystem', component: SolarSystem },
-
-    { path: '/rubic', component: Rubic },
-    { path: '/racing', component: Racing },
+    { path: '/breakbrics', component: BreakBrics },
+    { path: '/tetris', component: Tetris },
     { path: '/memory', component: Memory },
     { path: '/auth', component: UserAuth, meta: { requiresUnauth: true } },
     { path: '/:notFound(.*)', component: NotFound },

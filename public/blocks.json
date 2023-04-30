@@ -1,7 +1,7 @@
 {
   "blocks": [
     {
-      "color": "red",
+      "color": "yellow",
       "variants": [
         [
           [0, 0, 0],
@@ -26,7 +26,7 @@
       ]
     },
     {
-      "color": "cyan",
+      "color": "red",
       "variants": [
         [
           [0, 0, 0],
@@ -101,7 +101,7 @@
       ]
     },
     {
-      "color": "black",
+      "color": "purple",
       "variants": [
         [
           [0, 0, 0, 0],
@@ -112,7 +112,7 @@
       ]
     },
     {
-      "color": "orange",
+      "color": "yellow",
       "variants": [
         [
           [0, 0, 0, 0],

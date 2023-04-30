@@ -1,13 +1,11 @@
 import { createStore } from 'vuex';
 
-import jobsModule from './modules/jobs/index.js';
-import requestsModule from './modules/requests/index.js';
+import scoreModule from './modules/score/index.js';
 import authModule from './modules/auth/index.js';
 
 const store = createStore({
   modules: {
-    jobs: jobsModule,
-    requests: requestsModule,
+    score: scoreModule,
     auth: authModule,
   },
 });

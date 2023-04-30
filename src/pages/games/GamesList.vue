@@ -12,16 +12,16 @@
         <p>Memory Match</p>
       </div>
     </div>
-    <div class="grid-item" @click="goToGame('racing')">
-      <img :src="racingImage" alt="Racing">
+    <div class="grid-item" @click="goToGame('tetris')">
+      <img :src="tetrisImage" alt="Tetrs">
       <div class="overlay">
-        <p>Speed Racer</p>
+        <p>Tetris</p>
       </div>
     </div>
-    <div class="grid-item" @click="goToGame('hangman')">
-      <img :src="hangmanImage" alt="Hangman">
+    <div class="grid-item" @click="goToGame('breakbrics')">
+      <img :src="BreakBricsImage" alt="BreakBrics">
       <div class="overlay">
-        <p>Hangman</p>
+        <p>Break Brics</p>
       </div>
     </div>
   </div>
@@ -30,16 +30,16 @@
 <script>
 import snakeImage from '@/assets/snake.png';
 import memoryImage from '@/assets/memory.png';
-import racingImage from '@/assets/racing.png';
-import hangmanImage from '@/assets/hangman.png';
+import tetrisImage from '@/assets/tetris.png';
+import BreakBricsImage from '@/assets/BreakBrics.png';
 
 export default {
   data() {
     return {
       snakeImage,
       memoryImage,
-      racingImage,
-      hangmanImage,
+      tetrisImage,
+      BreakBricsImage,
     };
   },
   methods: {

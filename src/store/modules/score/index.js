@@ -4,12 +4,12 @@ import getters from './getters.js';
 
 export default {
   namespaced: true,
-  state() {
-    return {
-      requests: []
-    };
+  state: {
+    ranking: [],
+    selectedPlayerScore: null,
+    token: null,
   },
   mutations,
   actions,
-  getters
+  getters,
 };

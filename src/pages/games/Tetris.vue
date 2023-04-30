@@ -7,7 +7,7 @@
 <script>
 import Block from "../../components/tetris/Block.js";
 import Board from "../../components/tetris/Board.js";
-
+import { mapActions } from "vuex";
 export default {
   name: "Tetris",
 
@@ -24,6 +24,7 @@ export default {
   },
 
   methods: {
+    ...mapActions("score", ["addScore"]),
     async init() {
       this.canvas = this.$refs.canvas;
       this.context = this.canvas.getContext("2d");
@@ -64,15 +65,19 @@ export default {
     },
 
     moveDown() {
-      if (!this.block.checkCollision(0, 1)) {
-        this.block.moveDown();
-      } else {
-        // kolizja
-        this.block.lockOnBoard();
-        this.board.removeFullRows();
-        this.block.nextBlock();
-      }
-    },
+  if (!this.block.checkCollision(0, 1)) {
+    this.block.moveDown();
+  } else {
+    // collision
+    this.block.lockOnBoard();
+    this.board.removeFullRows();
+    if (this.board.isGameOver()) {
+      this.gameOver();
+      return;
+    }
+    this.block.nextBlock();
+  }
+},
 
     startGame() {
       this.lastDropTime = Date.now();
@@ -98,6 +103,14 @@ export default {
   this.board.draw(this.context, this.board.squareSize);
   this.block.drawOnBoard(this.context);
 },
+gameOver() {
+    const scoreData = {
+      game: "tetris",
+      time: Date.now(),
+      score: this.board.score,
+    };
+    this.addScore(scoreData);
+  },
 
   },
 
