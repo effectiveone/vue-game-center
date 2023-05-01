@@ -1,6 +1,10 @@
 <template>
   <div class="container">
     <div ref="pixiContainer"></div>
+    <div v-if="gameIsOver" class="game-over">
+      <h2>Game Over</h2>
+      <button @click="resetGame">Play Again</button>
+    </div>
   </div>
 </template>
 
@@ -18,6 +22,8 @@ export default {
       pauseGame: true,
       food: { x: 0, y: 0, color: 'white' },
       points: 0,
+      elapsedTime: 0,
+      gameIsOver: false,
     };
   },
   methods: {
@@ -41,12 +47,18 @@ export default {
       return rect;
     },
     resetGame() {
-      this.snake.forEach((el) => this.app.stage.removeChild(el.rect));
-      this.snake = [];
-      this.makeSnake(5);
-      this.randomFood();
-      this.pauseGame = true;
-    },
+    this.snake.forEach((el) => this.app.stage.removeChild(el.rect));
+    this.snake = [];
+    this.makeSnake(5);
+    this.randomFood();
+    this.pauseGame = false;
+    this.points = 0;
+    this.gameIsOver = false;
+    this.elapsedTime = 0;
+  },
+  // keyUp(e) {
+  //   this.restartGame(e);
+  // },
     moveSnake(dx, dy) {
       let headX = this.snake[0].x + dx;
       let headY = this.snake[0].y + dy;
@@ -117,7 +129,7 @@ checkWallsCollision() {
     head.y > this.app.renderer.height ||
     head.y < 0
   ) {
-    this.resetGame();
+    this.gameOver();
   }
 },
 checkFoodCollision() {
@@ -165,8 +177,32 @@ startApp() {
     if (!this.pauseGame) this.moveSnake(this.dx, this.dy);
     this.drawPoints();
     this.drawFood();
+    this.updateElapsedTime();
   });
 },
+updateElapsedTime() {
+    if (!this.pauseGame) {
+      this.elapsedTime += this.app.ticker.deltaMS;
+    }
+  },
+gameOver() {
+    // Dodawanie wyniku do sklepu
+    this.$store.dispatch("score/addScore", {
+      game: "snake",
+      time: this.elapsedTime,
+      score: this.points
+    });
+
+
+    // Ustawienie stanu gry na zakończony
+    this.pauseGame = true;
+    this.gameIsOver = true;
+  },
+  // restartGame(e) {
+  //   if (this.pauseGame && e.keyCode === 82) { // R
+  //     this.resetGame();
+  //   }
+  // },
 },
 mounted() {
 window.addEventListener('load', this.startApp);
@@ -183,10 +219,36 @@ window.addEventListener('load', this.startApp);
 }
 
 .container {
+  position: relative;
   display: grid;
   place-items: center;
 }
 body {
   background-color: black;
+}
+
+.game-over {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
 }
 </style>

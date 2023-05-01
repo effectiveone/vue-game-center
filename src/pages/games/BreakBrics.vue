@@ -1,7 +1,12 @@
 <template>
   <div class="container">
   <canvas ref="canvas"></canvas>
+  <div v-if="gameIsOver" class="game-over">
+      <h2>Game Over</h2>
+      <button @click="resetGame">Play Again</button>
+    </div>
 </div>
+
 </template>
 
 <script>
@@ -98,6 +103,7 @@ class Ball {
     this.y = this.canvas.height - 30;
     this.dx = 2;
     this.dy = -2;
+    this.gameIsOver = false;
   }
 }
 
@@ -234,6 +240,7 @@ for (let c = 0; c < this.columnCount; c++) {
 for (let r = 0; r < this.rowCount; r++) {
 this.bricks[c][r].status = 1;
 }
+this.gameIsOver = false;
 }
 }
 }
@@ -242,51 +249,79 @@ export default {
 name: "Game",
 data() {
 return {
-ballRadius: 10,
-score: 0,
-lives: 4,
-paddleBallHit: 0,
-renderer: null,
-canvas: null,
-context: null,
-ball: null,
-paddle: null,
-bricks: null,
-fps: 60,
+      ballRadius: 10,
+      score: 0,
+      lives: 4,
+      paddleBallHit: 0,
+      renderer: null,
+      canvas: null,
+      context: null,
+      ball: null,
+      paddle: null,
+      bricks: null,
+      fps: 60,
+      gameIsOver: false,
+      gameStarted: false,
+      elapsedTime: 0,
+      startTime: null,
+      gameInterval: null
 };
 },
 mounted() {
-  this.canvas = this.$refs.canvas;
-  this.renderer = new Renderer(this.canvas);
-  this.ball = new Ball(this.ballRadius);
+    this.canvas = this.$refs.canvas;
+    this.renderer = new Renderer(this.canvas);
+    this.ball = new Ball(this.ballRadius);
 
-  this.ball.canvas = this.canvas;
-  this.ball.renderer = this.renderer;
-  this.paddle = new Paddle(this.canvas); // Pass the canvas as a parameter
-  this.paddle.renderer = this.renderer;
+    this.ball.canvas = this.canvas;
+    this.ball.renderer = this.renderer;
+    this.paddle = new Paddle(this.canvas); 
+    this.paddle.renderer = this.renderer;
 
-  this.bricks = new Bricks();
-  this.bricks.canvas = this.canvas;
-  this.bricks.renderer = this.renderer;
+    this.bricks = new Bricks();
+    this.bricks.canvas = this.canvas;
+    this.bricks.renderer = this.renderer;
 
-  this.startGame();
-  this.ball.restart();
-},
-
+    this.startGame();
+    this.ball.restart();
+  },
+  beforeDestroy() {
+    clearInterval(this.gameInterval);
+  },
 methods: {
-startGame() {
-setInterval(this.updateGame, 1000 / this.fps);
-},
+  gameOver() {
+    clearInterval(this.gameInterval);
+        this.$store.dispatch("score/addScore", {
+      time: this.elapsedTime,
+      score: this.score,
+      game: "breakbrics",
+    });
+    this.gameIsOver = true;
+    this.gameStarted = false;
+       this.elapsedTime = 0;
+       this.startTime = null
+  },
+  startGame() {
+      if (this.gameStarted) return;
+
+      this.gameStarted = true;
+      this.startTime = Date.now();
+      this.gameInterval = setInterval(this.updateGame, 1000 / this.fps);
+    },
+    resetGame() {
+      this.restart();
+      this.startGame();
+    },
 updateGame() {
-// game logic
-this.paddle.update(); 
+  // game logic
+  this.elapsedTime = Math.floor((Date.now() - this.startTime) / 1000);
+
+  this.paddle.update();
   this.ball.update();
 
   if (this.ball.checkPaddleCollision(this.paddle)) {
     console.log("odbicie piłki paletką");
     this.paddleBallHit++;
   }
-
 
   if (this.ball.checkBottomWallCollision()) {
     console.log("strata życia");
@@ -300,7 +335,8 @@ this.paddle.update();
 
   if (this.lives <= 0) {
     console.log("koniec żyć, restart gry");
-    this.restart();
+    this.gameOver(); // Dodaj to wywołanie
+    // this.restart();
   }
 
   if (this.bricks.checkAllBricksDestroyed()) {
@@ -326,6 +362,14 @@ render() {
   );
 
   this.renderer.drawText(
+        "Czas: " + this.elapsedTime + "s",
+        250,
+        20,
+        "black",
+        "20px Verdana"
+      );
+
+  this.renderer.drawText(
     "Życia: " + this.lives,
     130,
     20,
@@ -335,11 +379,16 @@ render() {
 },
 
 restart() {
-  this.ball.restart();
-  this.score = 0;
-  this.lives = 4;
-  this.bricks.restart();
-},
+      clearInterval(this.gameInterval);
+      this.ball.restart();
+      this.score = 0;
+      this.lives = 4;
+      this.bricks.restart();
+      this.gameIsOver = false;
+      this.gameStarted = false;
+      this.elapsedTime = 0;
+      this.startTime = null;
+    },
 },
 };
 
@@ -353,7 +402,32 @@ restart() {
   .container {
     height: 500px;
     display: grid;
+    position: relative;
 place-items: center;
   }
+  .start-game, .game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
 </style>
 
