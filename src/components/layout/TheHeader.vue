@@ -8,7 +8,10 @@
         <li>
           <router-link to="/games">All games</router-link>
         </li>
-        <li  v-if="isLoggedIn">
+        <li>
+          <router-link to="/ranking">Ranking</router-link>
+        </li>
+        <li  v-if="!isLoggedIn">
           <router-link to="/auth">Login</router-link>
         </li>
         <li v-else>
@@ -23,6 +26,7 @@
 export default {
   computed: {
     isLoggedIn() {
+
       return this.$store.getters.isAuthenticated;
     }
   },

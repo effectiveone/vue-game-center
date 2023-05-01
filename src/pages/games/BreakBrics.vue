@@ -333,11 +333,10 @@ updateGame() {
     this.score++;
   }
 
-  if (this.lives <= 0) {
-    console.log("koniec żyć, restart gry");
-    this.gameOver(); // Dodaj to wywołanie
-    // this.restart();
-  }
+  if (this.lives <= 0 && !this.gameIsOver) {
+  console.log("koniec żyć, restart gry");
+  this.gameOver(); // Dodaj to wywołanie
+}
 
   if (this.bricks.checkAllBricksDestroyed()) {
     console.log("Gracz zniszczył wszystkie cegły");

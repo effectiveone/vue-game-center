@@ -1,4 +1,5 @@
 import axios from 'axios';
+import store from '../../index.js';
 
 const actions = {
   async getRanking({ commit, state }) {
@@ -35,14 +36,17 @@ const actions = {
       console.error(error);
     }
   },
-  async addScore({ dispatch, state }, score) {
+  async addScore({ dispatch, rootState }, score) {
     try {
+      const token = store.getters.token;
+
+      console.log('token', token);
       const response = await axios.post(
         'http://localhost:5002/api/score',
         score,
         {
           headers: {
-            Authorization: `Bearer ${state.token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );

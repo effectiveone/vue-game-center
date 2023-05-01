@@ -20,9 +20,9 @@ export default {
   data() {
     return {
       board: null,
-    block: null,
-    lastDropTime: null,
-    gameIsOver: false,
+      block: null,
+      lastDropTime: null,
+      gameIsOver: false,
     };
   },
 
@@ -43,7 +43,7 @@ export default {
       });
 
 
-      
+
       this.block = new Block(this.board);
       await this.block.init();
 
@@ -54,18 +54,18 @@ export default {
     },
 
     resetGame() {
-  this.gameIsOver = false;
+      this.gameIsOver = false;
 
-  this.block = new Block(this.board);
-  this.block.init().then(() => {
-    this.block.nextBlock();
-  });
+      this.block = new Block(this.board);
+      this.block.init().then(() => {
+        this.block.nextBlock();
+      });
 
-  // Resetujemy również planszę
-  this.board.reset();
+      // Resetujemy również planszę
+      this.board.reset();
 
-  this.startGame();
-},
+      this.startGame();
+    },
 
     initControls() {
       document.addEventListener("keydown", (e) => {
@@ -89,19 +89,19 @@ export default {
     },
 
     moveDown() {
-  if (!this.block.checkCollision(0, 1)) {
-    this.block.moveDown();
-  } else {
-    // collision
-    this.block.lockOnBoard();
-    this.board.removeFullRows();
-    if (this.board.isGameOver(this.isBlockYNegative)) {
-      this.gameOver();
-      return;
-    }
-    this.block.nextBlock();
-  }
-},
+      if (!this.block.checkCollision(0, 1)) {
+        this.block.moveDown();
+      } else {
+        // collision
+        this.block.lockOnBoard();
+        this.board.removeFullRows();
+        if (this.board.isGameOver(this.isBlockYNegative) && !this.gameIsOver) {
+          this.gameOver();
+          return;
+        }
+        this.block.nextBlock();
+      }
+    },
 
 
     startGame() {
@@ -123,24 +123,23 @@ export default {
       this.renderCanvas();
     },
     renderCanvas() {
-  this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-  this.board.draw(this.context, this.board.squareSize);
-  this.block.drawOnBoard(this.context);
-},
-isBlockYNegative() {
-    return this.block.y < 0;
-  },
-  gameOver() {
-  const scoreData = {
-    game: "tetris",
-    time: Date.now(),
-    score: this.board.score,
-  };
-  this.addScore(scoreData);
-  console.log("game over");
-  this.gameIsOver = true;
-},
+      this.board.draw(this.context, this.board.squareSize);
+      this.block.drawOnBoard(this.context);
+    },
+    isBlockYNegative() {
+      return this.block.y < 0;
+    },
+    gameOver() {
+      const scoreData = {
+        game: "tetris",
+        time: Date.now(),
+        score: this.board.score,
+      };
+      this.addScore(scoreData);
+      this.gameIsOver = true;
+    },
 
 
 
@@ -182,5 +181,4 @@ button {
   cursor: pointer;
   border-radius: 4px;
 }
-
 </style>

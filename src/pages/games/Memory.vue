@@ -68,13 +68,13 @@ export default {
   methods: {
     ...mapActions(['score/addScore']),
     gameover() {
-      this.gameIsOver = true;
-      this['score/addScore']({
+  this['score/addScore']({
     game: 'memory',
     time: this.time,
     score: this.score
   });
-    },
+  this.gameIsOver = true;
+},
     setup() {
       for (let i = 0; i < this.columns * this.rows / 2; i++) {
         const card1 = this.createCard(i % 4);
@@ -111,9 +111,9 @@ export default {
       }
     },
     flipCard(card) {
-  if (!this.canFlip || card.flipped || card.matched) return;
-
-  if (!this.startTime) {
+      if (!this.canFlip || card.flipped || card.matched || this.gameIsOver) return;
+  
+      if (!this.startTime) {
     this.startTime = new Date();
     this.startTimer();
   }
