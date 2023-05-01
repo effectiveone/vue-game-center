@@ -296,9 +296,9 @@ methods: {
       game: "breakbrics",
     });
     this.gameIsOver = true;
-    this.gameStarted = false;
-       this.elapsedTime = 0;
-       this.startTime = null
+    // this.gameStarted = false;
+    //    this.elapsedTime = 0;
+    //    this.startTime = null
   },
   startGame() {
       if (this.gameStarted) return;

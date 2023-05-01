@@ -124,13 +124,15 @@ export default {
 checkWallsCollision() {
   const head = this.snake[0];
   if (
-    head.x > this.app.renderer.width ||
+  (head.x > this.app.renderer.width ||
     head.x < 0 ||
     head.y > this.app.renderer.height ||
-    head.y < 0
-  ) {
-    this.gameOver();
-  }
+    head.y < 0) &&
+  !this.gameIsOver
+) {
+  this.gameOver();
+}
+
 },
 checkFoodCollision() {
   const head = this.snake[0];

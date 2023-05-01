@@ -10,8 +10,8 @@
       </div>
   
       <div v-if="isLoggedIn">
-        <h2>Your Scores</h2>
-  
+        <h2 style="display: flex; justify-content: center;">Your Scores</h2>
+
         <div class="game-grid">
           <SnakeRankingTable :showOnlyPlayerData="true" />
 <TetrisRankingTable :showOnlyPlayerData="true" />
@@ -38,7 +38,7 @@ export default {
   },
   computed: {
     isLoggedIn() {
-      return this.$store.state.auth.isLoggedIn;
+      return this.$store.state.auth.userId;
     },
   },
   mounted() {
@@ -46,7 +46,7 @@ export default {
     this.$store.dispatch("score/getRanking");
     // Fetch the user's scores if they're logged in
     if (this.isLoggedIn) {
-      this.$store.dispatch("score/getScoreByPlayerId", this.$store.state.auth.user.id);
+      this.$store.dispatch("score/getScoreByPlayerId");
     }
   },
 };

@@ -11,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(score, index) in ranking.breakbricks" :key="score._id" :class="{ 'player-row': score.playerId === selectedPlayerScore?.playerId }">
+        <tr v-for="(score, index) in ranking.breakbrics" :key="score._id" :class="{ 'player-row': score.playerId === selectedPlayerScore?.playerId }">
           <td>{{ index + 1 }}</td>
           <td>{{ score.playerName }}</td>
           <td>{{ score.time.toFixed(2) }}s</td>

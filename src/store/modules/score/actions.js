@@ -16,16 +16,15 @@ const actions = {
       console.error(error);
     }
   },
-  async getScoreByPlayerId({ commit, state }, playerId) {
+  async getScoreByPlayerId({ commit, state }) {
     try {
+      const token = store.getters.token;
+      console.log('getScoreByPlayerId__token', token);
       const response = await axios.get(
         'http://localhost:5002/api/score/selectedPlayer',
         {
           headers: {
-            Authorization: `Bearer ${state.token}`,
-          },
-          params: {
-            playerId,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
